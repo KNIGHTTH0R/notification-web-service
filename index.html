@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>Notification Centre Test</title>
+    <script src="./res/jquery-1.11.1.min.js"></script>
+    
+  </head>
+  <body>
+         <div id='msg' style='background-color:#96FCE0'></div><br><br>
+         
+         <table>
+            <tr>
+                <td style="width:250px" align="center"><input type="button" id='do_notification' value="send out a disc"></td>
+                <td style="width:250px" align="center"><input type="button" id='do_alert' value="send me the discs"></td>
+            </tr>
+         </table>
+         
+         
+         <script type="text/javascript">
+         
+         var myTimer;
+         
+         function AjaxCall(url, data, callBack){         
+            $.ajax({
+                url : url,
+                type : 'GET',
+                data : JSON.stringify(data),
+                contentType : 'application/json utf-8',
+                dataType : 'json',
+                success : function(data, textStatus, jqxhr){                  
+                    //callBack(data);
+                    $("#msg").html(data['data']);
+                },
+                error : function (jqxhr, textStatus, errorMessage){ 
+                    alert('something was wrong');              
+                }               
+            })
+        }
+
+    $(document).ready(function(){
+
+       $("#do_notification").click(function() {
+            AjaxCall("./client/client.php?action=PushNotification" , null, null);
+            clearTimeout(myTimer);
+            myTimer = setTimeout('$("#msg").html("")',5000);
+     
+        });
+    
+       $("#do_alert").click(function() {
+ 
+            AjaxCall("./client/client.php?action=DoAlert" , null, null);
+            clearTimeout(myTimer);
+            myTimer = setTimeout('$("#msg").html("")',5000);
+     
+        });
+
+   });
+</script>
+  </body>
+</html>
